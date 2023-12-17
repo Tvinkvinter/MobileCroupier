@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <declare-styleable name="ColorPickSquare">-->
+<!--        <attr name="color" format="integer"/>-->
+<!--        <attr name="blocked" format="boolean"/>-->
+<!--    </declare-styleable>-->
+    <declare-styleable name="ColorPickSquare">
+        <attr name="color" format="color"/>
+        <attr name="blocked" format="boolean"/>
+    </declare-styleable>
+</resources>

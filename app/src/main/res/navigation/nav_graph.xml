@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/configureScreenFragment">
+
+    <fragment
+        android:id="@+id/configureScreenFragment"
+        android:name="com.atarusov.pokerapp.screens.ConfigureScreenFragment"
+        android:label="fragment_configure_screen"
+        tools:layout="@layout/fragment_configure_screen" >
+        <action
+            android:id="@+id/action_configureScreenFragment_to_gameScreenFragment"
+            app:destination="@id/gameScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameScreenFragment"
+        android:name="com.atarusov.pokerapp.screens.GameScreenFragment"
+        android:label="fragment_game_screen"
+        tools:layout="@layout/fragment_game_screen" />
+</navigation>
