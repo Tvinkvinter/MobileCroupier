@@ -6,6 +6,7 @@
 <!--    </declare-styleable>-->
     <declare-styleable name="ColorPickSquare">
         <attr name="color" format="color"/>
+        <attr name="picked" format="boolean"/>
         <attr name="blocked" format="boolean"/>
     </declare-styleable>
 </resources>

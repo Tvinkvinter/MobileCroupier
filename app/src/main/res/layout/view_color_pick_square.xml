@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/color_pick_square_stroke"
-        android:src="@drawable/color_pick_square_stroke"
-        tools:backgroundTint="@color/red" />
+        tools:backgroundTint="@color/red"
+        tools:src="@drawable/color_pick_square_stroke" />
 
     <ImageView
         android:id="@+id/color_square_mask"

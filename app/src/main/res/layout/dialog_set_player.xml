@@ -68,7 +68,8 @@
             <com.atarusov.pokerapp.custom_views.ColorPickSquare
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:color="@color/blue" />
+                app:color="@color/blue"
+                app:picked="true"/>
 
             <com.atarusov.pokerapp.custom_views.ColorPickSquare
                 android:layout_width="wrap_content"

@@ -68,7 +68,11 @@ class ConfigureScreenFragment : Fragment() {
 
         dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { colorSquare ->
             colorSquare.setOnClickListener {
-                pickedColor = (colorSquare as ColorPickSquare).color
+                dialog.findViewById<GridLayout>(R.id.colors_grid).forEach {
+                    (it as ColorPickSquare).picked = false
+                }
+                (colorSquare as ColorPickSquare).picked = true
+                pickedColor = colorSquare.color
                 dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(pickedColor!!)
             }
         }
