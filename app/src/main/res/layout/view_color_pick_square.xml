@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity"
     tools:ignore="ContentDescription"
-    android:layout_height="match_parent">
+    tools:parentTag="android.widget.FrameLayout">
 
     <ImageView
         android:id="@+id/color_square"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/color_pick_square_stroke"
         android:src="@drawable/color_pick_square_stroke"
-        app:tint="@color/red" />
+        tools:backgroundTint="@color/red" />
 
     <ImageView
         android:id="@+id/color_square_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/color_pick_square_stroke"
-        app:tint="@color/translucent_white"
-        android:visibility="gone"/>
-
-    <ImageView
-        android:id="@+id/color_square_stroke"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/color_pick_square_stroke" />
-
-</FrameLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_lock"
+        tools:visibility="visible" />
+</merge>

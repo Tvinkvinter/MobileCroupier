@@ -9,7 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="translucent_white">#66FFFFFF</color>
 
-    <color name="red">#B40000</color>
-    <color name="green">#98FF98</color>
+    <color name="red">#D02323</color>
+    <color name="green">#67EE67</color>
     <color name="blue">#007DFF</color>
+    <color name="yellow">#FFEB37</color>
+    <color name="orange">#FFB800</color>
+    <color name="pink">#FB4DFF</color>
+    <color name="purple">#B102EE</color>
+    <color name="light_blue">#02E0EE</color>
 </resources>

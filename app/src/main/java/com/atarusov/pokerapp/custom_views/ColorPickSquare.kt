@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageView
 import com.atarusov.pokerapp.R
+import com.atarusov.pokerapp.databinding.ViewColorPickSquareBinding
 
 class ColorPickSquare(
     context: Context,
@@ -14,23 +14,19 @@ class ColorPickSquare(
     defStyleAttrs: Int,
     defStylesRes: Int
 ) : FrameLayout(context, attrs, defStyleAttrs, defStylesRes) {
-    private var color: Int? = context.getColor(R.color.white)
+    var color: Int = context.getColor(R.color.white)
         set(value) {
             field = value
-            rootView.findViewById<ImageView>(R.id.color_square).drawable.setTint(
-                context.getColor(value!!) ?: context.getColor(R.color.white)
-            )
+            binding.colorSquare.background.mutate().setTint(value)
         }
-    private var blocked: Boolean = false
+    var blocked: Boolean = false
         set(value) {
             field = value
-            rootView.findViewById<ImageView>(R.id.color_square_mask).visibility =
-                if (value) View.GONE else View.VISIBLE
-            rootView.findViewById<ImageView>(R.id.color_square_stroke).drawable.apply {
-                if (value) setTint(context.getColor(R.color.black))
-                else setTint(context.getColor(R.color.white))
-            }
+            binding.colorSquareMask.visibility =
+                if (value) View.VISIBLE else View.GONE
         }
+
+    private val binding: ViewColorPickSquareBinding
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
             this(context, attrs, defStyleAttr, 0)
@@ -39,7 +35,8 @@ class ColorPickSquare(
     constructor(context: Context) : this(context, null)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_color_pick_square, this)
+        LayoutInflater.from(context).inflate(R.layout.view_color_pick_square, this, true)
+        binding = ViewColorPickSquareBinding.bind(this)
 
         val typedArray = context.obtainStyledAttributes(
             attrs,
@@ -49,7 +46,7 @@ class ColorPickSquare(
         )
 
         color =
-            typedArray.getColor(R.styleable.ColorPickSquare_color, context.getColor(R.color.white))
+            typedArray.getInt(R.styleable.ColorPickSquare_color, context.getColor(R.color.white))
         blocked = typedArray.getBoolean(R.styleable.ColorPickSquare_blocked, false)
 
         typedArray.recycle()

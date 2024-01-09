@@ -8,4 +8,12 @@
     <string name="start_game">Start game</string>
     <string name="unknown_player">Player</string>
 
+    <!-- dialog set player -->
+    <string name="button_cancel">Cancel</string>
+    <string name="button_apply">Apply</string>
+    <string name="username">Username</string>
+    <string name="empty_name_error_message">Enter a name</string>
+    <string name="unpicked_color_error_message">Pick a color</string>
+    <string name="avatar_description">Player\'s avatar</string>
+
 </resources>
