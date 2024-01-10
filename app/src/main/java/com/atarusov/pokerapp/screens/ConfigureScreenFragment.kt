@@ -67,28 +67,51 @@ class ConfigureScreenFragment : Fragment() {
         var username: String? = null
 
         dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { colorSquare ->
-            colorSquare.setOnClickListener {
-                dialog.findViewById<GridLayout>(R.id.colors_grid).forEach {
-                    (it as ColorPickSquare).picked = false
+            if ((colorSquare as ColorPickSquare).color in viewModel.getPickedColors()) {
+                colorSquare.blocked = true
+                colorSquare.picked = false
+            } else {
+                colorSquare.setOnClickListener { it ->
+                    dialog.findViewById<GridLayout>(R.id.colors_grid).forEach {
+                        (it as ColorPickSquare).picked = false
+                    }
+                    (it as ColorPickSquare).picked = true
+                    pickedColor = it.color
+                    dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(pickedColor!!)
                 }
-                (colorSquare as ColorPickSquare).picked = true
-                pickedColor = colorSquare.color
-                dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(pickedColor!!)
             }
         }
 
         dialog.findViewById<EditText>(R.id.dialog_username_edit_text)
             .addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) { username = s.toString() }
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    username = s.toString()
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
 
         dialog.findViewById<Button>(R.id.dialog_apply_button).setOnClickListener {
             if (username == null) {
-                Toast.makeText(requireContext(), getString(R.string.empty_name_error_message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.empty_name_error_message),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else if (pickedColor == null) {
-                Toast.makeText(requireContext(), getString(R.string.unpicked_color_error_message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.unpicked_color_error_message),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 // TODO: come up with a more elegant solution
                 viewModel.addPlayer(Player(0, pickedColor!!, null, username!!, 0))

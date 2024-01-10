@@ -13,12 +13,15 @@ class ConfigureScreenViewModel(
     private val _players = MutableLiveData<List<Player>>()
     val players: LiveData<List<Player>> = _players
 
-    private val listener: PlayersListener = {
+    private var pickedColors = mutableListOf<Int>()
+
+    private val listener: PlayersListener = { it ->
         _players.value = it
     }
 
     init {
         loadPlayers()
+        pickedColors = (_players.value as List<Player>).map { player -> player.color }.toMutableList()
     }
 
     override fun onCleared() {
@@ -26,15 +29,19 @@ class ConfigureScreenViewModel(
         playersService.removeListener(listener)
     }
 
-    fun loadPlayers() {
+    private fun loadPlayers() {
         playersService.addListener(listener)
     }
 
     fun addPlayer(player: Player) {
         playersService.addPlayer(player)
+        pickedColors.add(player.color)
     }
 
     fun deletePlayer(player: Player) {
         playersService.deletePlayer(player)
+        pickedColors.remove(player.color)
     }
+
+    fun getPickedColors() = pickedColors
 }
