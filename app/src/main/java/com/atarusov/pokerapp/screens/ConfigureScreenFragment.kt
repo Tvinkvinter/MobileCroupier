@@ -94,6 +94,8 @@ class ConfigureScreenFragment : Fragment() {
                     count: Int,
                     after: Int
                 ) {
+                    if (count >= 8)
+                        Toast.makeText(context, getString(R.string.max_length_error_message), Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
