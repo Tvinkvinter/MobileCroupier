@@ -82,8 +82,8 @@ class ConfigureScreenFragment : Fragment() {
             }
         }
 
-        dialog.findViewById<EditText>(R.id.dialog_username_edit_text)
-            .addTextChangedListener(object : TextWatcher {
+        dialog.findViewById<EditText>(R.id.dialog_username_edit_text).apply {
+            addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     username = s.toString()
                 }
@@ -98,6 +98,13 @@ class ConfigureScreenFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
+
+            setOnFocusChangeListener { view, _ -> (view as EditText).hint = null }
+        }
+
+        dialog.findViewById<Button>(R.id.dialog_cancel_button).setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.findViewById<Button>(R.id.dialog_apply_button).setOnClickListener {
             if (username == null) {
