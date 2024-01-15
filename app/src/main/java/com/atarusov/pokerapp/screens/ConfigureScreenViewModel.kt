@@ -34,8 +34,10 @@ class ConfigureScreenViewModel(
     }
 
     fun addPlayer(player: Player) {
-        playersService.addPlayer(player)
-        pickedColors.add(player.color)
+        if (playersService.getPlayerCount() < 8) {
+            playersService.addPlayer(player)
+            pickedColors.add(player.color)
+        }
     }
 
     fun deletePlayer(player: Player) {

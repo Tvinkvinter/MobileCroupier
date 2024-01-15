@@ -12,6 +12,8 @@ class PlayersService {
         return players
     }
 
+    fun getPlayerCount(): Int = players.size
+
     fun addPlayer(player: Player){
         players.add(player)
         notifyChanges()
@@ -26,12 +28,8 @@ class PlayersService {
     }
 
     fun addListener(listener: PlayersListener){
-        if (players.size < 8) {
-            listeners.add(listener)
-            listener.invoke(players)
-        } else {
-            //TODO: отобразить toast
-        }
+        listeners.add(listener)
+        listener.invoke(players)
     }
 
     fun removeListener(listener: PlayersListener){
