@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.atarusov.pokerapp.databinding.PlayerBarBinding
 import com.atarusov.pokerapp.model.Player
 
-class PlayersAdapter: RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() {
+class PlayersAdapter : RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() {
 
     var players: List<Player> = emptyList()
         set(newValue) {
@@ -29,10 +29,11 @@ class PlayersAdapter: RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() {
         with(holder.binding) {
             playerNameTv.text = player.name
             playerStackTv.text = player.stack.toString()
-
-            playerInfoBar.imageTintList = ColorStateList.valueOf(player.color)
-            avatarRing.imageTintList = ColorStateList.valueOf(player.color)
-            playerAvatar.imageTintList = ColorStateList.valueOf(player.color)
+            if (player.color != null) {
+                playerInfoBar.imageTintList = ColorStateList.valueOf(player.color)
+                avatarRing.imageTintList = ColorStateList.valueOf(player.color)
+                playerAvatar.imageTintList = ColorStateList.valueOf(player.color)
+            }
         }
     }
 

@@ -49,7 +49,7 @@
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="20sp"
-            android:hint="@string/username"
+            android:hint="@string/hint_edit_text"
             android:maxLength="8"
             android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"

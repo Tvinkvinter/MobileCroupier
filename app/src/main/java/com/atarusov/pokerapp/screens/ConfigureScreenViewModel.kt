@@ -7,21 +7,33 @@ import com.atarusov.pokerapp.model.Player
 import com.atarusov.pokerapp.model.PlayersListener
 import com.atarusov.pokerapp.model.PlayersService
 
+enum class Message {
+    EMPTY_NAME, UNPICKED_COLOR
+}
+
+data class ConfigureScreenUiState(
+    val players: List<Player> = listOf(),
+    val maxPlayerCount: Boolean = players.size >= 8,
+    val dialogShown: Boolean = false,
+    val message: Message? = null
+)
+
+val ConfigureScreenUiState.pickedColors: List<Int>
+    get() = players.map { player -> player.color!! }.toList()
+
 class ConfigureScreenViewModel(
     private val playersService: PlayersService
 ): ViewModel() {
-    private val _players = MutableLiveData<List<Player>>()
-    val players: LiveData<List<Player>> = _players
 
-    private var pickedColors = mutableListOf<Int>()
+    private val _uiState = MutableLiveData(ConfigureScreenUiState())
+    val uiState: LiveData<ConfigureScreenUiState> = _uiState
 
     private val listener: PlayersListener = { it ->
-        _players.value = it
+        _uiState.value = ConfigureScreenUiState(it)
     }
 
     init {
         loadPlayers()
-        pickedColors = (_players.value as List<Player>).map { player -> player.color }.toMutableList()
     }
 
     override fun onCleared() {
@@ -34,16 +46,38 @@ class ConfigureScreenViewModel(
     }
 
     fun addPlayer(player: Player) {
-        if (playersService.getPlayerCount() < 8) {
+        if (!checkName(player))
+            _uiState.value = ConfigureScreenUiState(
+                players = _uiState.value!!.players,
+                message = Message.EMPTY_NAME
+            )
+        else if (!checkColor(player))
+            _uiState.value = ConfigureScreenUiState(
+                players = _uiState.value!!.players,
+                message = Message.UNPICKED_COLOR
+            )
+        else{
             playersService.addPlayer(player)
-            pickedColors.add(player.color)
+            showDialog(false)
         }
+    }
+
+    fun checkName(player: Player): Boolean {
+        return player.name != null
+    }
+
+    fun checkColor(player: Player): Boolean {
+        return player.color != null
     }
 
     fun deletePlayer(player: Player) {
         playersService.deletePlayer(player)
-        pickedColors.remove(player.color)
     }
 
-    fun getPickedColors() = pickedColors
+    fun showDialog(show: Boolean){
+        _uiState.value = ConfigureScreenUiState(
+            players = _uiState.value!!.players,
+            dialogShown = show
+        )
+    }
 }

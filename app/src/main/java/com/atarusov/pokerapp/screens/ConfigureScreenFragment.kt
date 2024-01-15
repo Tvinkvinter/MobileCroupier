@@ -28,6 +28,7 @@ class ConfigureScreenFragment : Fragment() {
 
     private lateinit var binding: FragmentConfigureScreenBinding
     private lateinit var adapter: PlayersAdapter
+    private lateinit var dialog: AlertDialog
 
     private val viewModel: ConfigureScreenViewModel by viewModels { factory() }
 
@@ -37,17 +38,28 @@ class ConfigureScreenFragment : Fragment() {
     ): View {
         binding = FragmentConfigureScreenBinding.inflate(inflater)
         adapter = PlayersAdapter()
+        buildDialog()
 
         binding.addPlayerBtn.setOnClickListener {
-            showDialog()
+            viewModel.showDialog(true)
         }
 
         binding.startGameBtn.setOnClickListener {
             findNavController().navigate(R.id.action_configureScreenFragment_to_gameScreenFragment)
         }
 
-        viewModel.players.observe(viewLifecycleOwner) {
-            adapter.players = it
+        viewModel.uiState.observe(viewLifecycleOwner) {
+            adapter.players = it.players
+            if (it.maxPlayerCount) binding.addPlayerBtn.isEnabled = false
+            when(it.message) {
+                Message.EMPTY_NAME -> Toast.makeText(context, R.string.empty_name_error_message, Toast.LENGTH_SHORT).show()
+                Message.UNPICKED_COLOR -> Toast.makeText(context, R.string.unpicked_color_error_message, Toast.LENGTH_SHORT).show()
+                else -> {}
+            }
+            if (it.dialogShown){
+                showDialog()
+            }
+            else dialog.dismiss()
         }
 
         binding.playersList.adapter = adapter
@@ -55,19 +67,29 @@ class ConfigureScreenFragment : Fragment() {
         return binding.root
     }
 
-    private fun showDialog() {
+    private fun buildDialog() {
         val builder = AlertDialog.Builder(requireContext(), R.style.WrapContentDialog)
         //TODO: get rid of the warning
         builder.setView(layoutInflater.inflate(R.layout.dialog_set_player, null))
-        val dialog = builder.create()
+        dialog = builder.create()
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    private fun showDialog() {
         dialog.show()
 
         var pickedColor: Int? = null
         var username: String? = null
 
+        dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(requireContext().getColor(R.color.white))
+        dialog.findViewById<EditText>(R.id.dialog_username_edit_text).apply {
+            clearFocus()
+            text = null
+            hint = getString(R.string.hint_edit_text)
+        }
+
         dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { colorSquare ->
-            if ((colorSquare as ColorPickSquare).color in viewModel.getPickedColors()) {
+            if ((colorSquare as ColorPickSquare).color in viewModel.uiState.value!!.pickedColors) {
                 colorSquare.blocked = true
                 colorSquare.picked = false
             } else {
@@ -95,7 +117,11 @@ class ConfigureScreenFragment : Fragment() {
                     after: Int
                 ) {
                     if (count >= 8)
-                        Toast.makeText(context, getString(R.string.max_length_error_message), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            getString(R.string.max_length_error_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -105,27 +131,11 @@ class ConfigureScreenFragment : Fragment() {
         }
 
         dialog.findViewById<Button>(R.id.dialog_cancel_button).setOnClickListener {
-            dialog.dismiss()
+            viewModel.showDialog(false)
         }
 
         dialog.findViewById<Button>(R.id.dialog_apply_button).setOnClickListener {
-            if (username == null) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.empty_name_error_message),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (pickedColor == null) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.unpicked_color_error_message),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                // TODO: come up with a more elegant solution
-                viewModel.addPlayer(Player(0, pickedColor!!, null, username!!, 0))
-                dialog.dismiss()
-            }
+            viewModel.addPlayer(Player(0, pickedColor, null, username, 0))
         }
     }
 }

@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.atarusov.pokerapp.PlayersAdapter
 import com.atarusov.pokerapp.databinding.FragmentGameScreenBinding
 
 class GameScreenFragment : Fragment() {
-    lateinit var binding: FragmentGameScreenBinding
-    lateinit var adapter: PlayersAdapter
+    private lateinit var binding: FragmentGameScreenBinding
+    private lateinit var adapter: PlayersAdapter
 
     private val viewModel: ConfigureScreenViewModel by viewModels { factory() }
 
@@ -26,9 +25,9 @@ class GameScreenFragment : Fragment() {
         adapter = PlayersAdapter()
         binding.playersList.adapter = adapter
 
-        viewModel.players.observe(viewLifecycleOwner, Observer {
-            adapter.players = it
-        })
+        viewModel.uiState.observe(viewLifecycleOwner) {
+            adapter.players = it.players
+        }
 
         return binding.root
     }
