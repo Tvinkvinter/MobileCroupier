@@ -1,5 +1,4 @@
 package com.atarusov.pokerapp.screens
-
 import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -76,17 +75,11 @@ class ConfigureScreenFragment : Fragment() {
     }
 
     private fun showDialog() {
+        buildDialog()
         dialog.show()
 
         var pickedColor: Int? = null
         var username: String? = null
-
-        dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(requireContext().getColor(R.color.white))
-        dialog.findViewById<EditText>(R.id.dialog_username_edit_text).apply {
-            clearFocus()
-            text = null
-            hint = getString(R.string.hint_edit_text)
-        }
 
         dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { colorSquare ->
             if ((colorSquare as ColorPickSquare).color in viewModel.uiState.value!!.pickedColors) {
