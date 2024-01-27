@@ -40,7 +40,7 @@ class ConfigureScreenFragment : Fragment() {
         buildDialog()
 
         binding.addPlayerBtn.setOnClickListener {
-            viewModel.showDialog(true)
+            showDialog()
         }
 
         binding.startGameBtn.setOnClickListener {
@@ -51,19 +51,20 @@ class ConfigureScreenFragment : Fragment() {
             adapter.players = it.players
             if (it.maxPlayerCount) binding.addPlayerBtn.isEnabled = false
             when(it.message) {
-                Message.EMPTY_NAME -> Toast.makeText(context, R.string.empty_name_error_message, Toast.LENGTH_SHORT).show()
-                Message.UNPICKED_COLOR -> Toast.makeText(context, R.string.unpicked_color_error_message, Toast.LENGTH_SHORT).show()
-                else -> {}
+                Message.EMPTY_NAME -> showMessage(getString(R.string.empty_name_error_message))
+                Message.UNPICKED_COLOR -> showMessage(getString(R.string.unpicked_color_error_message))
+                null -> {}
             }
-            if (it.dialogShown){
-                showDialog()
-            }
-            else dialog.dismiss()
         }
 
         binding.playersList.adapter = adapter
 
         return binding.root
+    }
+
+    private fun showMessage(message: String){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        viewModel.messageShown()
     }
 
     private fun buildDialog() {
@@ -110,11 +111,7 @@ class ConfigureScreenFragment : Fragment() {
                     after: Int
                 ) {
                     if (count >= 8)
-                        Toast.makeText(
-                            context,
-                            getString(R.string.max_length_error_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showMessage(getString(R.string.max_length_error_message))
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -124,11 +121,12 @@ class ConfigureScreenFragment : Fragment() {
         }
 
         dialog.findViewById<Button>(R.id.dialog_cancel_button).setOnClickListener {
-            viewModel.showDialog(false)
+            dialog.dismiss()
         }
 
         dialog.findViewById<Button>(R.id.dialog_apply_button).setOnClickListener {
-            viewModel.addPlayer(Player(0, pickedColor, null, username, 0))
+            val isSuccessful = viewModel.addPlayer(Player(0, pickedColor, null, username, 0))
+            if(isSuccessful) dialog.dismiss()
         }
     }
 }

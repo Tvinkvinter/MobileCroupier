@@ -14,7 +14,6 @@ enum class Message {
 data class ConfigureScreenUiState(
     val players: List<Player> = listOf(),
     val maxPlayerCount: Boolean = players.size >= 8,
-    val dialogShown: Boolean = false,
     val message: Message? = null
 )
 
@@ -45,7 +44,7 @@ class ConfigureScreenViewModel(
         playersService.addListener(listener)
     }
 
-    fun addPlayer(player: Player) {
+    fun addPlayer(player: Player): Boolean {
         if (!checkName(player))
             _uiState.value = ConfigureScreenUiState(
                 players = _uiState.value!!.players,
@@ -58,8 +57,9 @@ class ConfigureScreenViewModel(
             )
         else{
             playersService.addPlayer(player)
-            showDialog(false)
+            return true
         }
+        return false
     }
 
     fun checkName(player: Player): Boolean {
@@ -74,10 +74,10 @@ class ConfigureScreenViewModel(
         playersService.deletePlayer(player)
     }
 
-    fun showDialog(show: Boolean){
+    fun messageShown() {
         _uiState.value = ConfigureScreenUiState(
             players = _uiState.value!!.players,
-            dialogShown = show
+            message = null
         )
     }
 }
