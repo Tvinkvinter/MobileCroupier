@@ -62,6 +62,24 @@ class ConfigureScreenViewModel(
         return false
     }
 
+    fun updatePlayer(player: Player): Boolean {
+        if (!checkName(player))
+            _uiState.value = ConfigureScreenUiState(
+                players = _uiState.value!!.players,
+                message = Message.EMPTY_NAME
+            )
+        else if (!checkColor(player))
+            _uiState.value = ConfigureScreenUiState(
+                players = _uiState.value!!.players,
+                message = Message.UNPICKED_COLOR
+            )
+        else{
+            playersService.updatePlayer(player)
+            return true
+        }
+        return false
+    }
+
     fun checkName(player: Player): Boolean {
         return player.name != null
     }

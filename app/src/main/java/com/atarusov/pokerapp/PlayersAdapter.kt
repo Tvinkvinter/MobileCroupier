@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.atarusov.pokerapp.databinding.PlayerTileBinding
 import com.atarusov.pokerapp.model.Player
 
-class PlayersAdapter : RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() {
+class OnClickListener(val clickListener: (player:Player) -> Unit){
+    fun onClick(player: Player) = clickListener(player)
+}
+class PlayersAdapter(private val clickListener: OnClickListener) : RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() {
 
     var players: List<Player> = emptyList()
         set(newValue) {
@@ -26,12 +29,16 @@ class PlayersAdapter : RecyclerView.Adapter<PlayersAdapter.PlayersViewHolder>() 
 
     override fun onBindViewHolder(holder: PlayersViewHolder, position: Int) {
         val player = players[position]
+
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(player)
+        }
+
         with(holder.binding) {
             playerNameTv.text = player.name
             if (player.color != null) {
                 playerNameTv.compoundDrawableTintList = ColorStateList.valueOf(player.color)
                 playerCard.setStrokeColor(ColorStateList.valueOf(player.color))
-
             }
         }
     }
