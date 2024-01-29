@@ -92,6 +92,10 @@ class ConfigureScreenViewModel(
         playersService.deletePlayer(player)
     }
 
+    fun swapPlayers(position1: Int, position2: Int){
+        playersService.swapPlayers(position1, position2)
+    }
+
     fun messageShown() {
         _uiState.value = ConfigureScreenUiState(
             players = _uiState.value!!.players,

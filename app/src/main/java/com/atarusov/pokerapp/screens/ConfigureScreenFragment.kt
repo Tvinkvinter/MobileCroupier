@@ -18,6 +18,8 @@ import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.atarusov.pokerapp.OnClickListener
 import com.atarusov.pokerapp.PlayersAdapter
 import com.atarusov.pokerapp.R
@@ -61,6 +63,30 @@ class ConfigureScreenFragment : Fragment() {
         }
 
         binding.playersList.adapter = adapter
+
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+            0
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                source: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val sourcePosition = source.adapterPosition
+                val targetPosition = target.adapterPosition
+
+                viewModel.swapPlayers(sourcePosition, targetPosition)
+                adapter.notifyItemMoved(sourcePosition, targetPosition)
+
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+        })
+
+        itemTouchHelper.attachToRecyclerView(binding.playersList)
 
         return binding.root
     }

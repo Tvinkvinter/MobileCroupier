@@ -39,6 +39,10 @@ class PlayersService {
         }
     }
 
+    fun swapPlayers(position1: Int, position2: Int){
+        Collections.swap(players, position1, position2)
+    }
+
     fun addListener(listener: PlayersListener) {
         listeners.add(listener)
         listener.invoke(players)
