@@ -1,5 +1,7 @@
 package com.atarusov.pokerapp.model
 
+import java.util.Collections
+
 typealias PlayersListener = (players: List<Player>) -> Unit
 
 class PlayersService {
@@ -15,15 +17,17 @@ class PlayersService {
     fun getPlayerCount(): Int = players.size
 
     fun addPlayer(player: Player) {
-        val playerToAdd =
-            Player(getPlayerCount(), player.color, player.photo, player.name, player.stack)
-        players.add(playerToAdd)
+        players.add(player)
         notifyChanges()
     }
 
     fun updatePlayer(updatedPlayer: Player) {
-        // id equals index in the list
-        players[updatedPlayer.id] = updatedPlayer
+        players.forEachIndexed { index, player ->
+            if (player.id == updatedPlayer.id){
+                players[index] = updatedPlayer
+                return@forEachIndexed
+            }
+        }
         notifyChanges()
     }
 

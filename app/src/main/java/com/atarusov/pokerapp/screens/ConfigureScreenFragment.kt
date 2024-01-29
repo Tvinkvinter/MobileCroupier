@@ -140,11 +140,11 @@ class ConfigureScreenFragment : Fragment() {
 
         dialog.findViewById<Button>(R.id.dialog_apply_button).setOnClickListener {
             if (curPlayer == null) {
-                val isSuccessful = viewModel.addPlayer(Player(0, pickedColor, null, username, 0))
+                val isSuccessful = viewModel.addPlayer(Player(pickedColor, null, username, 0))
                 if (isSuccessful) dialog.dismiss()
             } else {
                 val isSuccessful =
-                    viewModel.updatePlayer(Player(curPlayer.id, pickedColor, null, username, 0))
+                    viewModel.updatePlayer(Player(pickedColor, null, username, 0, curPlayer.id))
                 if (isSuccessful) dialog.dismiss()
             }
         }
