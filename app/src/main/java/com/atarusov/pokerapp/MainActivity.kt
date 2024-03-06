@@ -1,10 +1,8 @@
 package com.atarusov.pokerapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.atarusov.pokerapp.databinding.ActivityMainBinding
-import com.atarusov.pokerapp.screens.ConfigureScreenFragment
-import com.atarusov.pokerapp.screens.GameScreenFragment
 
 class MainActivity : AppCompatActivity() {
 

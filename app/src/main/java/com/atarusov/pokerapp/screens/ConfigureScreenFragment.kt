@@ -1,6 +1,7 @@
 package com.atarusov.pokerapp.screens
 
 import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -40,9 +41,19 @@ class ConfigureScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentConfigureScreenBinding.inflate(inflater)
-        adapter = PlayersAdapter(OnClickListener {
-            showDialog(it)
-        })
+
+        binding.trashCanIc.setOnClickListener {
+            viewModel.switchDeleteMode()
+        }
+
+        adapter = PlayersAdapter(
+            tileClickListener = OnClickListener {
+                showDialog(it)
+            },
+            crossClickListener = OnClickListener {
+                viewModel.deletePlayer(it)
+            })
+        binding.playersList.adapter = adapter
 
         binding.addPlayerBtn.setOnClickListener {
             showDialog()
@@ -54,15 +65,28 @@ class ConfigureScreenFragment : Fragment() {
 
         viewModel.uiState.observe(viewLifecycleOwner) {
             adapter.players = it.players
-            if (it.maxPlayerCount) binding.addPlayerBtn.isEnabled = false
+
+            if (it.isInDeleteMode) {
+                binding.trashCanIc.imageTintList =
+                    ColorStateList.valueOf(requireContext().getColor(R.color.red))
+                adapter.isInDeleteMode = true
+                binding.addPlayerBtn.isEnabled = false
+                binding.startGameBtn.isEnabled = false
+            } else {
+                binding.trashCanIc.imageTintList =
+                    ColorStateList.valueOf(requireContext().getColor(R.color.white))
+                binding.addPlayerBtn.isEnabled = true
+                binding.startGameBtn.isEnabled = true
+                adapter.isInDeleteMode = false
+            }
+
+            if (it.maxPlayersCountReached) binding.addPlayerBtn.isEnabled = false
             when (it.message) {
                 Message.EMPTY_NAME -> showMessage(getString(R.string.empty_name_error_message))
                 Message.UNPICKED_COLOR -> showMessage(getString(R.string.unpicked_color_error_message))
                 null -> {}
             }
         }
-
-        binding.playersList.adapter = adapter
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,

@@ -13,22 +13,27 @@ enum class Message {
 
 data class ConfigureScreenUiState(
     val players: List<Player> = listOf(),
-    val maxPlayerCount: Boolean = players.size >= 8,
-    val message: Message? = null
+    val message: Message? = null,
+    val isInDeleteMode: Boolean = false
 )
 
+val ConfigureScreenUiState.maxPlayersCountReached: Boolean
+    get() = players.size >= 8
 val ConfigureScreenUiState.pickedColors: List<Int>
     get() = players.map { player -> player.color!! }.toList()
 
 class ConfigureScreenViewModel(
     private val playersService: PlayersService
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableLiveData(ConfigureScreenUiState())
     val uiState: LiveData<ConfigureScreenUiState> = _uiState
 
     private val listener: PlayersListener = { it ->
-        _uiState.value = ConfigureScreenUiState(it)
+        _uiState.value = ConfigureScreenUiState(
+            players = it,
+            isInDeleteMode = _uiState.value?.isInDeleteMode ?: false
+        )
     }
 
     init {
@@ -55,7 +60,7 @@ class ConfigureScreenViewModel(
                 players = _uiState.value!!.players,
                 message = Message.UNPICKED_COLOR
             )
-        else{
+        else {
             playersService.addPlayer(player)
             return true
         }
@@ -73,7 +78,7 @@ class ConfigureScreenViewModel(
                 players = _uiState.value!!.players,
                 message = Message.UNPICKED_COLOR
             )
-        else{
+        else {
             playersService.updatePlayer(player)
             return true
         }
@@ -92,7 +97,7 @@ class ConfigureScreenViewModel(
         playersService.deletePlayer(player)
     }
 
-    fun swapPlayers(position1: Int, position2: Int){
+    fun swapPlayers(position1: Int, position2: Int) {
         playersService.swapPlayers(position1, position2)
     }
 
@@ -100,6 +105,13 @@ class ConfigureScreenViewModel(
         _uiState.value = ConfigureScreenUiState(
             players = _uiState.value!!.players,
             message = null
+        )
+    }
+
+    fun switchDeleteMode() {
+        _uiState.value = ConfigureScreenUiState(
+            players = _uiState.value!!.players,
+            isInDeleteMode = !_uiState.value!!.isInDeleteMode
         )
     }
 }

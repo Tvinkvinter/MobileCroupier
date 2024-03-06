@@ -12,31 +12,42 @@
         android:layout_height="0dp"
         android:backgroundTint="@color/black"
         app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:cardUseCompatPadding="true"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/red"
         app:strokeWidth="3dp">
 
-            <TextView
-                android:id="@+id/player_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/inter"
-                android:gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:lines="1"
-                android:ems="6"
-                tools:text="username"
-                app:drawableTopCompat="@drawable/ic_player_avatar_big" />
+        <TextView
+            android:id="@+id/player_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            android:drawablePadding="12dp"
+            android:ems="6"
+            android:fontFamily="@font/inter"
+            android:gravity="center_horizontal"
+            android:lines="1"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:drawableTopCompat="@drawable/ic_player_avatar_big"
+            tools:text="username" />
+
+        <ImageView
+            android:id="@+id/deleting_cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@string/deleting_cross_description"
+            android:src="@drawable/deleting_cross"
+            android:visibility="gone" />
 
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
