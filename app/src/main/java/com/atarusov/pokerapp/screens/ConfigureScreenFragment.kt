@@ -26,7 +26,6 @@ import com.atarusov.pokerapp.PlayersAdapter
 import com.atarusov.pokerapp.R
 import com.atarusov.pokerapp.custom_views.ColorPickSquare
 import com.atarusov.pokerapp.databinding.FragmentConfigureScreenBinding
-import com.atarusov.pokerapp.model.Player
 
 class ConfigureScreenFragment : Fragment() {
 
@@ -48,7 +47,7 @@ class ConfigureScreenFragment : Fragment() {
 
         adapter = PlayersAdapter(
             tileClickListener = OnClickListener {
-                showDialog(it)
+                viewModel.showDialog(it)
             },
             crossClickListener = OnClickListener {
                 viewModel.deletePlayer(it)
@@ -56,7 +55,7 @@ class ConfigureScreenFragment : Fragment() {
         binding.playersList.adapter = adapter
 
         binding.addPlayerBtn.setOnClickListener {
-            showDialog()
+            viewModel.showDialog()
         }
 
         binding.startGameBtn.setOnClickListener {
@@ -84,8 +83,24 @@ class ConfigureScreenFragment : Fragment() {
             when (it.message) {
                 Message.EMPTY_NAME -> showMessage(getString(R.string.empty_name_error_message))
                 Message.UNPICKED_COLOR -> showMessage(getString(R.string.unpicked_color_error_message))
+                Message.MAX_NAME_LENGTH -> showMessage(getString(R.string.max_length_error_message))
                 null -> {}
             }
+        }
+
+        buildDialog()
+
+        viewModel.dialogUiState.observe(viewLifecycleOwner) {
+            if (it.isDialogShown) {
+                if (!dialog.isShowing) showDialog()
+                dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(
+                    it.pickedColor ?: requireContext().getColor(R.color.white)
+                )
+                dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { square ->
+                    (square as ColorPickSquare).picked =
+                        square.color == viewModel.dialogUiState.value!!.pickedColor
+                }
+            } else dialog.dismiss()
         }
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
@@ -128,35 +143,21 @@ class ConfigureScreenFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun showDialog(curPlayer: Player? = null) {
+    private fun showDialog() {
         buildDialog()
         dialog.show()
 
-        var pickedColor: Int? = curPlayer?.color
-        var username: String? = curPlayer?.name
-
-        dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(
-            pickedColor ?: requireContext().getColor(R.color.white)
-        )
-
         dialog.findViewById<EditText>(R.id.dialog_username_edit_text).apply {
+            if (viewModel.dialogUiState.value?.username != null)
+                setText(viewModel.dialogUiState.value?.username)
             setOnFocusChangeListener { view, _ -> (view as EditText).hint = null }
-            setText(username)
-
             addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    username = s.toString()
+                    viewModel.setUsernameInDialog(s.toString())
                 }
 
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    if (count >= 8)
-                        showMessage(getString(R.string.max_length_error_message))
-                }
+                    s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
@@ -164,39 +165,23 @@ class ConfigureScreenFragment : Fragment() {
 
         dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { colorSquare ->
             if ((colorSquare as ColorPickSquare).color in viewModel.uiState.value!!.pickedColors) {
-                if (pickedColor == colorSquare.color) {
-                    colorSquare.blocked = false
-                    colorSquare.picked = true
-                } else {
-                    colorSquare.blocked = true
-                    colorSquare.picked = false
-                }
+                colorSquare.blocked = colorSquare.color != viewModel.dialogUiState.value?.pickedColor
             }
             if (!colorSquare.blocked) {
-                colorSquare.setOnClickListener { it ->
-                    dialog.findViewById<GridLayout>(R.id.colors_grid).forEach {
-                        (it as ColorPickSquare).picked = false
-                    }
-                    (it as ColorPickSquare).picked = true
-                    pickedColor = it.color
-                    dialog.findViewById<ImageView>(R.id.dialog_avatar).drawable.setTint(pickedColor!!)
+                colorSquare.setOnClickListener {
+                    viewModel.setPickedColorInDialog((it as ColorPickSquare).color)
                 }
             }
         }
-
+        dialog.setOnDismissListener {
+            viewModel.hideDialog()
+        }
         dialog.findViewById<Button>(R.id.dialog_cancel_button).setOnClickListener {
-            dialog.dismiss()
+            viewModel.hideDialog()
         }
 
         dialog.findViewById<Button>(R.id.dialog_apply_button).setOnClickListener {
-            if (curPlayer == null) {
-                val isSuccessful = viewModel.addPlayer(Player(pickedColor, null, username, 0))
-                if (isSuccessful) dialog.dismiss()
-            } else {
-                val isSuccessful =
-                    viewModel.updatePlayer(Player(pickedColor, null, username, 0, curPlayer.id))
-                if (isSuccessful) dialog.dismiss()
-            }
+            viewModel.setPlayerInDialog()
         }
     }
 }

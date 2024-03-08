@@ -50,7 +50,6 @@
             android:textColorHint="@color/white"
             android:textSize="20sp"
             android:hint="@string/hint_edit_text"
-            android:maxLength="8"
             android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/dialog_avatar_card"
