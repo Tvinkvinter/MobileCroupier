@@ -95,8 +95,8 @@ class ConfigureScreenViewModel(
         playersService.deletePlayer(player)
     }
 
-    fun swapPlayers(position1: Int, position2: Int) {
-        playersService.swapPlayers(position1, position2)
+    fun movePlayers(position1: Int, position2: Int) {
+        playersService.movePlayers(position1, position2)
     }
 
     fun switchDeleteMode() {

@@ -115,7 +115,7 @@ class ConfigureScreenFragment : Fragment() {
                 val sourcePosition = source.adapterPosition
                 val targetPosition = target.adapterPosition
 
-                viewModel.swapPlayers(sourcePosition, targetPosition)
+                viewModel.movePlayers(sourcePosition, targetPosition)
                 adapter.notifyItemMoved(sourcePosition, targetPosition)
 
                 return true

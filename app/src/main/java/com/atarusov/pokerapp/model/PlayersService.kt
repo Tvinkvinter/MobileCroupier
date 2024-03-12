@@ -1,7 +1,5 @@
 package com.atarusov.pokerapp.model
 
-import java.util.Collections
-
 typealias PlayersListener = (players: List<Player>) -> Unit
 
 class PlayersService {
@@ -38,9 +36,10 @@ class PlayersService {
             notifyChanges()
         }
     }
-
-    fun swapPlayers(position1: Int, position2: Int){
-        Collections.swap(players, position1, position2)
+    fun movePlayers(position1: Int, position2: Int){
+        val playerMoved = players[position1]
+        players.removeAt(position1)
+        players.add(position2, playerMoved)
     }
 
     fun addListener(listener: PlayersListener) {
