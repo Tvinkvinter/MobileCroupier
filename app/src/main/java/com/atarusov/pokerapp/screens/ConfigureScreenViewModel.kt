@@ -44,11 +44,7 @@ class ConfigureScreenViewModel(
     val dialogUiState: LiveData<SetPlayerDialogUiState> = _dialogUiState
 
     private val listener: PlayersListener = { it ->
-        _uiState.value = ConfigureScreenUiState(
-            players = it,
-            message = null,
-            isInDeleteMode = _uiState.value?.isInDeleteMode ?: false
-        )
+        _uiState.value = _uiState.value!!.copy(players = it)
     }
 
     init {
@@ -65,14 +61,14 @@ class ConfigureScreenViewModel(
     }
 
     private fun addPlayer(player: Player) {
-        if(checkName(player.name) && checkColor(player.color)) {
+        if (checkName(player.name) && checkColor(player.color)) {
             playersService.addPlayer(player)
             hideDialog()
         }
     }
 
     private fun updatePlayer(player: Player) {
-        if(checkName(player.name) && checkColor(player.color)) {
+        if (checkName(player.name) && checkColor(player.color)) {
             playersService.updatePlayer(player)
             hideDialog()
         }
@@ -82,14 +78,14 @@ class ConfigureScreenViewModel(
         return if (username == null) {
             showMessage(Message.EMPTY_NAME)
             false
-        } else if (username.length  > 8){
+        } else if (username.length > 8) {
             showMessage(Message.MAX_NAME_LENGTH)
             false
         } else true
     }
 
     private fun checkColor(color: Int?): Boolean {
-        return if (color == null){
+        return if (color == null) {
             showMessage(Message.UNPICKED_COLOR)
             false
         } else true
@@ -104,10 +100,7 @@ class ConfigureScreenViewModel(
     }
 
     fun switchDeleteMode() {
-        _uiState.value = ConfigureScreenUiState(
-            players = _uiState.value!!.players,
-            isInDeleteMode = !_uiState.value!!.isInDeleteMode
-        )
+        _uiState.value = _uiState.value!!.copy(isInDeleteMode = !_uiState.value!!.isInDeleteMode)
     }
 
     fun showDialog(player: Player? = null) {
@@ -119,8 +112,8 @@ class ConfigureScreenViewModel(
         )
     }
 
-    fun setPlayerInDialog(){
-        if (_dialogUiState.value!!.isDialogInUpdateMode){
+    fun setPlayerInDialog() {
+        if (_dialogUiState.value!!.isDialogInUpdateMode) {
             updatePlayer(
                 Player(
                     _dialogUiState.value!!.pickedColor, null,
@@ -129,51 +122,33 @@ class ConfigureScreenViewModel(
                 )
             )
         } else {
-            addPlayer(Player(
-                _dialogUiState.value!!.pickedColor, null,
-                _dialogUiState.value!!.username, 0
-            ))
+            addPlayer(
+                Player(
+                    _dialogUiState.value!!.pickedColor, null,
+                    _dialogUiState.value!!.username, 0
+                )
+            )
         }
     }
 
     fun hideDialog() {
-        _dialogUiState.value = SetPlayerDialogUiState(
-            isDialogShown = false
-        )
+        _dialogUiState.value = SetPlayerDialogUiState(isDialogShown = false)
     }
 
     fun setUsernameInDialog(username: String) {
-        _dialogUiState.value = SetPlayerDialogUiState(
-            isDialogShown = _dialogUiState.value!!.isDialogShown,
-            playerId = _dialogUiState.value!!.playerId,
-            username = username,
-            pickedColor = _dialogUiState.value!!.pickedColor
-        )
+        _dialogUiState.value = _dialogUiState.value!!.copy(username = username)
     }
 
     fun setPickedColorInDialog(pickedColor: Int) {
-        _dialogUiState.value = SetPlayerDialogUiState(
-            isDialogShown = _dialogUiState.value!!.isDialogShown,
-            playerId = _dialogUiState.value!!.playerId,
-            username = _dialogUiState.value!!.username,
-            pickedColor = pickedColor
-        )
+        _dialogUiState.value = _dialogUiState.value!!.copy(pickedColor = pickedColor)
     }
 
-    private fun showMessage(type: Message) {
-        _uiState.value = ConfigureScreenUiState(
-            players = _uiState.value!!.players,
-            message = type,
-            isInDeleteMode = _uiState.value!!.isInDeleteMode
-        )
+    private fun showMessage(messageType: Message) {
+        _uiState.value = _uiState.value!!.copy(message = messageType)
     }
 
     fun messageShown() {
-        _uiState.value = ConfigureScreenUiState(
-            players = _uiState.value!!.players,
-            message = null,
-            isInDeleteMode = _uiState.value!!.isInDeleteMode
-        )
+        _uiState.value = _uiState.value!!.copy(message = null)
     }
 
 }
