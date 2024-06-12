@@ -21,6 +21,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.atarusov.pokerapp.ItemType
 import com.atarusov.pokerapp.OnClickListener
 import com.atarusov.pokerapp.PlayersAdapter
 import com.atarusov.pokerapp.R
@@ -46,6 +47,7 @@ class ConfigureScreenFragment : Fragment() {
         }
 
         adapter = PlayersAdapter(
+            itemType = ItemType.Tile,
             tileClickListener = OnClickListener {
                 viewModel.showDialog(it)
             },
@@ -165,7 +167,8 @@ class ConfigureScreenFragment : Fragment() {
 
         dialog.findViewById<GridLayout>(R.id.colors_grid).forEach { colorSquare ->
             if ((colorSquare as ColorPickSquare).color in viewModel.uiState.value!!.pickedColors) {
-                colorSquare.blocked = colorSquare.color != viewModel.dialogUiState.value?.pickedColor
+                colorSquare.blocked =
+                    colorSquare.color != viewModel.dialogUiState.value?.pickedColor
             }
             if (!colorSquare.blocked) {
                 colorSquare.setOnClickListener {
