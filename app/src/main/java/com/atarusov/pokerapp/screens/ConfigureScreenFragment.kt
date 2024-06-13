@@ -27,6 +27,7 @@ import com.atarusov.pokerapp.PlayersAdapter
 import com.atarusov.pokerapp.R
 import com.atarusov.pokerapp.custom_views.ColorPickSquare
 import com.atarusov.pokerapp.databinding.FragmentConfigureScreenBinding
+import com.atarusov.pokerapp.model.Player
 
 class ConfigureScreenFragment : Fragment() {
 
@@ -55,6 +56,20 @@ class ConfigureScreenFragment : Fragment() {
                 viewModel.deletePlayer(it)
             })
         binding.playersList.adapter = adapter
+
+        //TODO: temporary solution
+        viewModel.addDefaultPlayers(
+            listOf(
+                Player(
+                    requireContext().getColor(R.color.blue), null,
+                    getString(R.string.default_player_name, 1), 0
+                ),
+                Player(
+                    requireContext().getColor(R.color.red), null,
+                    getString(R.string.default_player_name, 2), 0
+                ),
+            )
+        )
 
         binding.addPlayerBtn.setOnClickListener {
             viewModel.showDialog()

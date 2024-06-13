@@ -67,6 +67,10 @@ class ConfigureScreenViewModel(
         }
     }
 
+    fun addDefaultPlayers(players: List<Player>){
+        players.forEach { addPlayer(it) }
+    }
+
     private fun updatePlayer(player: Player) {
         if (checkName(player.name) && checkColor(player.color)) {
             playersService.updatePlayer(player)
