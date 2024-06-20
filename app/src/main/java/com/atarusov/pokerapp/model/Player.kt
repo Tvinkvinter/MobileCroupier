@@ -7,5 +7,6 @@ data class Player(
     val photo: String?,
     val name: String?,
     val stack: Int,
-    val id: UUID = UUID.randomUUID()
+    val id: UUID = UUID.randomUUID(),
+    val currentBet: Int = 0
 )

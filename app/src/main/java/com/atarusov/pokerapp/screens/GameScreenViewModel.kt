@@ -7,36 +7,40 @@ import com.atarusov.pokerapp.model.Player
 import com.atarusov.pokerapp.model.PlayersListener
 import com.atarusov.pokerapp.model.PlayersService
 
+data class GameScreenUiState(
+    val players: List<Player> = listOf(),
+    val message: Message? = null,
+    val pot: Int = 0,
+    val indexOfPlayerToAct: Int = 0
+)
+
 class GameScreenViewModel(
     private val playersService: PlayersService
 ) : ViewModel() {
 
-    private val _players = MutableLiveData<List<Player>>()
-    val players: LiveData<List<Player>> = _players
+    private val _uiState = MutableLiveData(GameScreenUiState())
+    val uiState: LiveData<GameScreenUiState> = _uiState
+
+    private val listener: PlayersListener = { it ->
+        _uiState.value = _uiState.value!!.copy(players = it)
+    }
 
     init {
         loadPlayers()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        playersService.removeListener(listener)
-    }
-
-    fun loadPlayers() {
+    private fun loadPlayers() {
         playersService.addListener(listener)
     }
 
-    fun addPlayer(player: Player) {
-        playersService.addPlayer(player)
+    private fun getNextPlayerIndex(): Int {
+        var nextPlayerIndex = _uiState.value!!.indexOfPlayerToAct + 1
+        if (nextPlayerIndex >= _uiState.value!!.players.size) nextPlayerIndex = 0
+        return nextPlayerIndex
     }
 
-    fun deletePlayer(player: Player) {
-        playersService.deletePlayer(player)
-    }
-
-    private val listener: PlayersListener = {
-        _players.value = it
+    fun checkAction() {
+        _uiState.value = _uiState.value!!.copy(indexOfPlayerToAct = getNextPlayerIndex())
     }
 
 }

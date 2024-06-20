@@ -62,11 +62,13 @@ class ConfigureScreenFragment : Fragment() {
             listOf(
                 Player(
                     requireContext().getColor(R.color.blue), null,
-                    getString(R.string.default_player_name, 1), 0
+                    getString(R.string.default_player_name, 1),
+                    resources.getInteger(R.integer.default_start_stack)
                 ),
                 Player(
                     requireContext().getColor(R.color.red), null,
-                    getString(R.string.default_player_name, 2), 0
+                    getString(R.string.default_player_name, 2),
+                    resources.getInteger(R.integer.default_start_stack)
                 ),
             )
         )

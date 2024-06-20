@@ -19,7 +19,12 @@
     <!-- game screen -->
     <string name="pot_title">Pot</string>
     <string name="button_call">Call</string>
-    <string name="button_fold">Fold</string>
     <string name="button_raise">Raise</string>
+    <string name="button_fold">Fold</string>
+    <string name="button_check">Check</string>
+    <string name="player_stack">Stack:</string>
+    <string name="player_bet">Bet:</string>
+    <string name="player_big_blind">BB</string>
+    <string name="player_small_blind">SB</string>
 
 </resources>

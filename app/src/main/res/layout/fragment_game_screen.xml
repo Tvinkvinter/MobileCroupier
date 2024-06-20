@@ -53,69 +53,90 @@
     <Button
         android:id="@+id/call_btn"
         style="@style/stroked_button"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_width="0dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
         android:text="@string/button_call"
-        app:layout_constraintBottom_toTopOf="@id/big_avatar_stroke"
-        app:layout_constraintEnd_toStartOf="@id/fold_btn"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/fold_btn"
-        style="@style/stroked_button"
-        android:layout_width="wrap_content"
-        android:text="@string/button_fold"
+        app:layout_constraintBottom_toTopOf="@id/fold_btn"
         app:layout_constraintEnd_toStartOf="@id/raise_btn"
-        app:layout_constraintStart_toEndOf="@id/call_btn"
-        app:layout_constraintTop_toTopOf="@id/call_btn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/raise_btn"
         style="@style/stroked_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="18dp"
         android:backgroundTint="@color/black"
         android:text="@string/button_raise"
+        app:layout_constraintBottom_toBottomOf="@id/call_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/fold_btn"
-        app:layout_constraintTop_toTopOf="@id/fold_btn" />
+        app:layout_constraintStart_toEndOf="@id/call_btn" />
+
+    <Button
+        android:id="@+id/fold_btn"
+        style="@style/stroked_button"
+        android:layout_width="0dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
+        android:text="@string/button_fold"
+        app:layout_constraintBottom_toTopOf="@id/avatar_stroke"
+        app:layout_constraintEnd_toStartOf="@id/check_btn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/check_btn"
+        style="@style/stroked_button"
+        android:layout_width="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="28dp"
+        android:text="@string/button_check"
+        app:layout_constraintBottom_toTopOf="@id/avatar_stroke"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fold_btn" />
 
     <ImageView
-        android:id="@+id/line"
+        android:id="@+id/horizontal_line"
         android:layout_width="0dp"
         android:layout_height="12dp"
-        android:src="@drawable/line"
+        android:src="@drawable/horizontal_line"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/big_avatar_stroke"
-        app:layout_constraintTop_toTopOf="@id/big_avatar_stroke" />
+        app:layout_constraintStart_toStartOf="@id/avatar_stroke"
+        app:layout_constraintTop_toTopOf="@id/avatar_stroke" />
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/avatar_round"
-        app:layout_constraintBottom_toBottomOf="@id/big_avatar_stroke"
-        app:layout_constraintEnd_toEndOf="@id/big_avatar_stroke"
-        app:layout_constraintStart_toStartOf="@id/big_avatar_stroke"
-        app:layout_constraintTop_toTopOf="@id/big_avatar_stroke" />
+        app:layout_constraintBottom_toBottomOf="@id/avatar_stroke"
+        app:layout_constraintEnd_toEndOf="@id/avatar_stroke"
+        app:layout_constraintStart_toStartOf="@id/avatar_stroke"
+        app:layout_constraintTop_toTopOf="@id/avatar_stroke" />
 
     <ImageView
-        android:id="@+id/big_avatar_stroke"
+        android:id="@+id/avatar_stroke"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="-32dp"
         android:layout_marginBottom="-22dp"
-        android:src="@drawable/avatar_ring_big"
+        android:src="@drawable/avatar_ring_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
+        android:id="@+id/avatar_icon"
         android:layout_width="74dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_player_avatar"
-        app:layout_constraintBottom_toBottomOf="@id/big_avatar_stroke"
-        app:layout_constraintEnd_toEndOf="@id/big_avatar_stroke"
-        app:layout_constraintStart_toStartOf="@id/big_avatar_stroke"
-        app:layout_constraintTop_toTopOf="@id/big_avatar_stroke" />
+        app:layout_constraintBottom_toBottomOf="@id/avatar_stroke"
+        app:layout_constraintEnd_toEndOf="@id/avatar_stroke"
+        app:layout_constraintStart_toStartOf="@id/avatar_stroke"
+        app:layout_constraintTop_toTopOf="@id/avatar_stroke" />
 
     <TextView
         android:id="@+id/cur_player_name_tv"
@@ -123,22 +144,71 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@id/line"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_line"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/big_avatar_stroke"
-        tools:text="Tvin" />
+        app:layout_constraintStart_toEndOf="@id/avatar_stroke"
+        tools:text="player 0" />
 
     <TextView
         android:id="@+id/cur_player_stack_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:fontFamily="@font/inter_bold"
+        android:includeFontPadding="false"
+        android:text="@string/player_stack"
         android:textColor="@color/white"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/big_avatar_stroke"
-        app:layout_constraintTop_toBottomOf="@id/line"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/cur_player_bet_tv"
+        app:layout_constraintStart_toEndOf="@id/avatar_stroke"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_line" />
+
+    <TextView
+        android:id="@+id/cur_player_bet_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:fontFamily="@font/inter_bold"
+        android:includeFontPadding="false"
+        android:text="@string/player_bet"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/avatar_stroke"
+        app:layout_constraintTop_toBottomOf="@id/cur_player_stack_tv" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:barrierDirection="end"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="cur_player_stack_tv, cur_player_bet_tv" />
+
+    <TextView
+        android:id="@+id/player_stack_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/cur_player_stack_tv"
         tools:text="1000" />
+
+    <TextView
+        android:id="@+id/player_bet_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/cur_player_bet_tv"
+        tools:text="100" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

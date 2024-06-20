@@ -13,6 +13,9 @@ class ViewModelFactory(
             ConfigureScreenViewModel::class.java -> {
                 ConfigureScreenViewModel(app.playersService)
             }
+            GameScreenViewModel::class.java -> {
+                GameScreenViewModel(app.playersService)
+            }
             else -> {
                 throw java.lang.IllegalStateException("Unknown view model class")
             }
